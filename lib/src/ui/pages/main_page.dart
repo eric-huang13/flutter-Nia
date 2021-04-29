@@ -12,7 +12,7 @@ import 'package:nia_app/src/repo/profile_repo.dart';
 import 'package:nia_app/src/ui/pages/events_page.dart';
 import 'package:nia_app/src/ui/pages/groups_page.dart';
 import 'package:nia_app/src/ui/pages/home_page.dart';
-import 'package:nia_app/src/ui/pages/login_page.dart';
+import 'package:nia_app/src/ui/pages/login/login_page.dart';
 import 'package:nia_app/src/ui/pages/notifications_page.dart';
 import 'package:nia_app/src/ui/pages/profile_page.dart';
 import 'package:nia_app/src/ui/pages/search.dart';

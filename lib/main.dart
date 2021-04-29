@@ -3,16 +3,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:nia_app/src/data/app_assets.dart';
 import 'package:nia_app/src/data/app_colors.dart';
 import 'package:nia_app/src/data/app_strings.dart';
-import 'package:nia_app/src/ui/pages/earn_pavement_points.dart';
-import 'package:nia_app/src/ui/pages/login_page.dart';
+import 'package:nia_app/src/ui/pages/login/login_page.dart';
 import 'package:nia_app/src/ui/pages/main_page.dart';
 import 'package:nia_app/src/util/shared_preferences_util.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferencesUtil sharedPreferencesUtil = SharedPreferencesUtil();
-  bool isThisUsersFirstTime =
-      await sharedPreferencesUtil.isThisUsersFirstTime();
+  bool isThisUsersFirstTime = await sharedPreferencesUtil.isThisUsersFirstTime();
 
   bool isUserLoggedIn = await sharedPreferencesUtil.isUserLoggedIn();
   runApp(MyApp(
@@ -26,6 +24,7 @@ class MyApp extends StatelessWidget {
   final bool firstTimeStatus;
 
   MyApp({@required this.loginStatus, @required this.firstTimeStatus});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,9 +35,7 @@ class MyApp extends StatelessWidget {
         home: firstTimeStatus
             ? OnboardingPage()
             : loginStatus
-                ? MainPage(
-                    initialPageIndex: 1,
-                  )
+                ? MainPage(initialPageIndex: 1)
                 : LoginPage());
   }
 }
@@ -90,14 +87,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
             Expanded(
                 child: FractionallySizedBox(
               widthFactor: 0.4,
-              child: Image.asset(
-                AppAssets.app_logo,
-              ),
+              child: Image.asset(AppAssets.app_logo),
             )),
-            Expanded(
-                child: SvgPicture.asset(
-              AppAssets.onboarding_build,
-            )),
+            Expanded(child: SvgPicture.asset(AppAssets.onboarding_build)),
             Expanded(
                 child: Column(
               children: <Widget>[
