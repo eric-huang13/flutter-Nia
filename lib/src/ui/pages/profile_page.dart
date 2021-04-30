@@ -30,7 +30,8 @@ class ProfilePage extends StatefulWidget {
   final bool isSelfProfile;
   final int memberId;
 
-  const ProfilePage({Key key, this.isSelfProfile = true, this.memberId}) : super(key: key);
+  const ProfilePage({Key key, this.isSelfProfile = true, this.memberId})
+      : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -40,7 +41,8 @@ class _ProfilePageState extends State<ProfilePage> {
   double appBarElevation = 0.0;
   bool _isLoading = false;
   PermissionStatus _permissionStatus = PermissionStatus.unknown;
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
     _getProfile();
@@ -90,10 +92,13 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         _isLoading = true;
       });
-      int userId = widget.isSelfProfile == false ? widget.memberId : await SharedPreferencesUtil().getUserId();
+      int userId = widget.isSelfProfile == false
+          ? widget.memberId
+          : await SharedPreferencesUtil().getUserId();
       String token = await SecureStorageUtil().retrieveAuthenticationToken();
 
-      Result<Profile> profileResult = await ProfileService().getProfile(userId: userId, token: token);
+      Result<Profile> profileResult =
+          await ProfileService().getProfile(userId: userId, token: token);
 
       setState(() {
         _isLoading = false;
@@ -101,6 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +126,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   radius: 50.0,
                 ),
                 AppSpacers.mediumVerticalSpacer,
-                Text(profile.name, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+                Text(profile.name,
+                    style:
+                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
                 AppSpacers.extraSmallVerticalSpacer,
                 Text('${profile.state} - ${profile.city}'),
                 AppSpacers.mediumVerticalSpacer,
@@ -132,18 +140,24 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Container(
                           decoration: BoxDecoration(
                               color: AppColors.primaryColor,
-                              borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(4.0)),
                               border: Border.all(color: AppColors.white)),
                           child: Material(
                             color: AppColors.transparent,
                             child: InkWell(
                               splashColor: AppColors.white.withOpacity(0.7),
-                              borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(24.0)),
                               onTap: () async {
-                                final PermissionHandler _permissionHandler = PermissionHandler();
-                                var result = await _permissionHandler.requestPermissions([PermissionGroup.storage]);
-                                print("thando $result");
-                                if (result[PermissionGroup.storage] == PermissionStatus.granted) {
+                                final PermissionHandler _permissionHandler =
+                                    PermissionHandler();
+                                var result = await _permissionHandler
+                                    .requestPermissions(
+                                        [PermissionGroup.storage]);
+print("thando $result");
+                                if (result[PermissionGroup.storage] ==
+                                    PermissionStatus.granted) {
                                   ///Create a new vCard
                                   var vCard = VCard();
 
@@ -152,8 +166,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                   vCard.middleName = "";
                                   vCard.lastName = profile.title;
                                   vCard.organization = profile.company;
-                                  vCard.photo
-                                      .attachFromUrl('http://networkinaction.com/images/avatar/group/de7090fb016655c5bba345d9.png', 'PNG');
+                                  vCard.photo.attachFromUrl(
+                                      'http://networkinaction.com/images/avatar/group/de7090fb016655c5bba345d9.png',
+                                      'PNG');
                                   vCard.workPhone = profile.phoneNumber;
                                   vCard.cellPhone = profile.mobilePhoneNumber;
                                   vCard.title = profile.title;
@@ -163,12 +178,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                   vCard.homeAddress.label = 'Home Address';
                                   vCard.homeAddress.street = profile.address;
                                   vCard.homeAddress.city = profile.city;
-                                  vCard.homeAddress.stateProvince = profile.state;
+                                  vCard.homeAddress.stateProvince =
+                                      profile.state;
                                   vCard.homeAddress.postalCode = profile.zip;
-                                  vCard.homeAddress.countryRegion = profile.country;
-                                  vCard.socialUrls['Yelp Reference URL'] = profile.yelpReferenceUrl;
-                                  vCard.socialUrls['Google Reference URL'] = profile.googleReferenceUrl;
-                                  vCard.socialUrls['Facebook Reference URL'] = profile.facebookReferenceUrl;
+                                  vCard.homeAddress.countryRegion =
+                                      profile.country;
+                                  vCard.socialUrls['Yelp Reference URL'] =
+                                      profile.yelpReferenceUrl;
+                                  vCard.socialUrls['Google Reference URL'] =
+                                      profile.googleReferenceUrl;
+                                  vCard.socialUrls['Facebook Reference URL'] =
+                                      profile.facebookReferenceUrl;
 
                                   final file = await _localFile;
 
@@ -184,7 +204,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   final path = await _localPath;
 
                                   getTemporaryDirectory().then((tempDir) {
-                                    File('$path/contact.vcf').copySync("${tempDir.path}/contacts.vcf");
+                                    File('$path/contact.vcf').copySync(
+                                        "${tempDir.path}/contacts.vcf");
                                     final MailOptions mailOptions = MailOptions(
                                       body: 'BODY',
                                       subject: 'SUBJECT',
@@ -206,13 +227,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                 }
                               },
                               child: Padding(
-                                padding: const EdgeInsets.only(top: 12, bottom: 12, left: 18, right: 18),
+                                padding: const EdgeInsets.only(
+                                    top: 12, bottom: 12, left: 18, right: 18),
                                 child: Center(
                                   child: Text(
                                     AppStrings.sendContactInfo,
                                     textAlign: TextAlign.left,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600, fontSize: 12, letterSpacing: 0.27, color: AppColors.white),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                        letterSpacing: 0.27,
+                                        color: AppColors.white),
                                   ),
                                 ),
                               ),
@@ -225,27 +250,35 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Container(
                           decoration: BoxDecoration(
                               color: AppColors.lightGrey.withOpacity(0.5),
-                              borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(4.0)),
                               border: Border.all(color: AppColors.white)),
                           child: Material(
                             color: AppColors.transparent,
                             child: InkWell(
                               splashColor: AppColors.white.withOpacity(0.7),
-                              borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(24.0)),
                               onTap: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => EarnPavementPointsPage()),
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          EarnPavementPointsPage()),
                                 );
                               },
                               child: Padding(
-                                padding: const EdgeInsets.only(top: 12, bottom: 12, left: 18, right: 18),
+                                padding: const EdgeInsets.only(
+                                    top: 12, bottom: 12, left: 18, right: 18),
                                 child: Center(
                                   child: Text(
                                     AppStrings.earnPavementPoints,
                                     textAlign: TextAlign.left,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600, fontSize: 12, letterSpacing: 0.27, color: AppColors.black),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                        letterSpacing: 0.27,
+                                        color: AppColors.black),
                                   ),
                                 ),
                               ),
@@ -410,7 +443,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 icon: new Icon(Icons.arrow_back, color: AppColors.primaryColor),
                 onPressed: () => Navigator.of(context).pop(),
               ),
-              title: Text(AppStrings.profilePageTitle, style: TextStyle(color: AppColors.primaryColor)),
+              title: Text(AppStrings.profilePageTitle,
+                  style: TextStyle(color: AppColors.primaryColor)),
               centerTitle: true,
             )
           : null,
